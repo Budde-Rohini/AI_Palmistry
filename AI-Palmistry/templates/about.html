@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}About AI Palmistry - Intelligent Palm Analysis{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-card p-4 p-md-5 rounded-4">
+                <h1 class="fw-bold mb-3">About AI Palmistry</h1>
+                <p class="lead text-secondary mb-4">
+                    AI Palmistry bridges computer vision technology with centuries of traditional palmistry lore to provide a non-predictive, self-reflective exploration of hand feature geometry.
+                </p>
+
+                <h4 class="fw-bold text-gold mt-4 mb-3"><i class="fa-solid fa-microchip me-2"></i> How Computer Vision Works</h4>
+                <p class="text-secondary">
+                    Our backend uses Google MediaPipe Hand Landmarker to identify 21 key coordinate points across the hand structure. OpenCV filters then preprocess the palm area with contrast normalization (CLAHE), bilateral smoothing, and adaptive thresholding to detect major creases (Heart, Head, Life, and Fate lines).
+                </p>
+
+                <h4 class="fw-bold text-gold mt-4 mb-3"><i class="fa-solid fa-book-open me-2"></i> Traditional Lore Integration</h4>
+                <p class="text-secondary">
+                    Measurements extracted by computer vision are evaluated against a structured rule matrix derived from traditional palmistry references. Crucially, these interpretations are explicitly presented as symbolic traditions rather than deterministic predictions.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

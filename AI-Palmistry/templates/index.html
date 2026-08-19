@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Palmistry - Intelligent Palm Analysis & Traditional Palmistry Interpretation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5 position-relative overflow-hidden">
+    <div class="hero-glow position-absolute top-50 start-50 translate-middle"></div>
+    <div class="container py-lg-5 position-relative z-1">
+        <div class="row align-items-center gy-5">
+            <div class="col-lg-7 text-center text-lg-start">
+                <div class="badge-pill mb-3 d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-purple-glow border border-purple-light">
+                    <i class="fa-solid fa-sparkles text-gold"></i>
+                    <span class="small fw-semibold text-purple-light">Computer Vision meets Traditional Lore</span>
+                </div>
+                <h1 class="display-3 fw-bold tracking-tight mb-3">
+                    Discover Your Palm Through <span class="text-gradient">AI Computer Vision</span>
+                </h1>
+                <p class="lead text-secondary mb-4 col-lg-11">
+                    Explore your palm through precise computer vision detection and traditional palmistry interpretation. Upload a photo to extract major lines and landmark features in seconds.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3">
+                    <a href="{{ url_for('upload') }}" class="btn btn-gradient btn-lg px-4 py-3 rounded-pill fw-semibold shadow-lg">
+                        <i class="fa-solid fa-hand-holding-heart me-2"></i> Start Palm Analysis
+                    </a>
+                    <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold border-opacity-25">
+                        <i class="fa-solid fa-circle-question me-2"></i> Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <div class="hero-visual-card position-relative mx-auto">
+                    <div class="hero-card-inner glass-card p-4 rounded-4 text-center border-gold-subtle">
+                        <div class="palm-visual-container position-relative rounded-4 p-4 overflow-hidden mb-3">
+                            <i class="fa-solid fa-hand-sparkles display-1 text-gold hero-palm-icon my-4"></i>
+                            <div class="scanner-line"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center small text-muted px-2">
+                            <span><i class="fa-solid fa-circle-check text-success me-1"></i> Landmark Tracking</span>
+                            <span><i class="fa-solid fa-microchip text-gold me-1"></i> OpenCV Engine</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 border-top border-secondary border-opacity-10 bg-dark-subtle">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h2 class="h1 fw-bold mb-2">How It Works</h2>
+            <p class="text-secondary">4 simple steps to reveal your structured palm analysis</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="glass-card p-4 rounded-4 h-100 step-card text-center">
+                    <div class="step-num text-gold mb-3">01</div>
+                    <h5 class="fw-bold mb-2">Upload Palm Photo</h5>
+                    <p class="text-secondary small mb-0">Upload a clear photo of your left or right palm in good lighting.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="glass-card p-4 rounded-4 h-100 step-card text-center">
+                    <div class="step-num text-gold mb-3">02</div>
+                    <h5 class="fw-bold mb-2">AI Hand Detection</h5>
+                    <p class="text-secondary small mb-0">MediaPipe detects 21 key hand landmarks and isolates the palm region.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="glass-card p-4 rounded-4 h-100 step-card text-center">
+                    <div class="step-num text-gold mb-3">03</div>
+                    <h5 class="fw-bold mb-2">Feature Extraction</h5>
+                    <p class="text-secondary small mb-0">OpenCV extracts major line paths (Life, Head, Heart, Fate) and metrics.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="glass-card p-4 rounded-4 h-100 step-card text-center">
+                    <div class="step-num text-gold mb-3">04</div>
+                    <h5 class="fw-bold mb-2">Traditional Lore</h5>
+                    <p class="text-secondary small mb-0">Detected features are synthesized into a traditional palmistry report.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Feature Cards Section -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h2 class="h1 fw-bold mb-2">Analysis Dimensions</h2>
+            <p class="text-secondary">Comprehensive breakdown distinguishing AI detection from traditional lore</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-hand text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Hand & Palm Detection</h5>
+                    <p class="text-secondary small">MediaPipe landmark extraction for palm geometry, aspect ratio, and finger lengths.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-bezier-curve text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Palm-Line Analysis</h5>
+                    <p class="text-secondary small">Computer vision detection of major lines (Heart, Head, Life, Fate) with visual overlays.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-ruler-combined text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Feature Vector Extraction</h5>
+                    <p class="text-secondary small">Calculates line continuity, depth, length, and curvature metrics into JSON format.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-briefcase text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Career Interpretation</h5>
+                    <p class="text-secondary small">Traditional lore associated with Fate line continuity and Head line direction.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-graduation-cap text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Education & Focus</h5>
+                    <p class="text-secondary small">Traditional symbolism tied to Head line length, clarity, and mental focus traits.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-coins text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Financial Outlook Lore</h5>
+                    <p class="text-secondary small">Traditional associations based on palm firmness and line clarity (non-financial advice).</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-heart text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Relationship Insights</h5>
+                    <p class="text-secondary small">Traditional emotional expression lore derived from Heart line curvature and origin.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-brain text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Personality Characteristics</h5>
+                    <p class="text-secondary small">Traditional palm shape classification (Earth, Air, Fire, Water) and temperament lore.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 rounded-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa-solid fa-file-contract text-gold fs-3"></i></div>
+                    <h5 class="fw-bold">Interactive AI Report & QA</h5>
+                    <p class="text-secondary small">Structured synthesis report with interactive AI question-answering based on detected data.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Disclaimer Banner Section -->
+<section class="py-5 border-top border-secondary border-opacity-10 bg-dark-subtle">
+    <div class="container">
+        <div class="glass-card p-4 p-md-5 rounded-4 border-warning border-opacity-25">
+            <div class="d-flex align-items-start gap-4 flex-column flex-md-row">
+                <div class="badge-icon bg-warning bg-opacity-10 text-warning p-3 rounded-circle fs-2 flex-shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold text-light mb-2">Important Disclaimer</h4>
+                    <p class="text-secondary mb-0">
+                        <strong>AI Palmistry</strong> is designed strictly for self-reflection, entertainment, and exploring traditional palmistry lore using modern computer vision. Palmistry is not a predictive science and cannot diagnose health conditions, predict future financial outcomes, or make deterministic claims about your life. All generated interpretations should be treated as symbolic traditions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Palm Image - AI Palmistry{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center mb-4">
+            <h1 class="fw-bold mb-2">Upload Your Palm Photo</h1>
+            <p class="text-secondary">Follow the photo guidelines below for optimal computer vision analysis.</p>
+        </div>
+            <div class="glass-card p-4 p-md-5 rounded-4 text-center">
+                <!-- Alert Banner -->
+                <div id="errorAlert" class="alert alert-danger bg-danger bg-opacity-10 border-danger text-danger text-start d-none mb-4 rounded-3 small">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i> <span id="errorMessage"></span>
+                </div>
+
+                <form id="uploadForm" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+
+                    <div class="upload-dropzone p-5 rounded-4 border-dashed mb-4" id="dropzone">
+                        <i class="fa-solid fa-cloud-arrow-up display-3 text-gold mb-3"></i>
+                        <h5 class="fw-bold mb-2">Drag and drop your palm image here</h5>
+                        <p class="text-secondary small mb-3">Supports JPG, JPEG, PNG, WEBP (Max 10MB)</p>
+                        <input type="file" id="fileInput" name="palm_image" accept="image/jpeg,image/png,image/webp" class="d-none">
+                        <button type="button" class="btn btn-outline-gold rounded-pill px-4" onclick="document.getElementById('fileInput').click()">
+                            <i class="fa-solid fa-folder-open me-2"></i> Browse Files
+                        </button>
+                    </div>
+
+                    <!-- Image Preview Container -->
+                    <div id="previewContainer" class="d-none mb-4">
+                        <div class="position-relative d-inline-block">
+                            <img id="imagePreview" src="" alt="Palm Preview" class="img-fluid rounded-3 max-vh-40 shadow-lg border border-secondary border-opacity-25">
+                            <button type="button" id="removeBtn" class="btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 translate-middle shadow">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Instructions Card -->
+                    <div class="glass-card p-3 rounded-3 mb-4 text-start bg-dark-subtle small border-start border-gold border-3">
+                        <div class="fw-semibold text-gold mb-2"><i class="fa-solid fa-camera me-1"></i> Capture Instructions:</div>
+                        <ul class="mb-0 text-secondary ps-3">
+                            <li>Capture your palm in good, even lighting.</li>
+                            <li>Keep the complete palm visible from wrist to fingertips.</li>
+                            <li>Keep fingers slightly separated and flat.</li>
+                            <li>Avoid heavy shadows or blurred motion.</li>
+                            <li>Keep camera parallel to your palm.</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" id="analyzeBtn" class="btn btn-gradient btn-lg rounded-pill px-5 fw-semibold" disabled>
+                        <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Analyze Palm
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

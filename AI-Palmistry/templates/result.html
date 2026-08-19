@@ -1,0 +1,327 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Palm Analysis Result - AI Palmistry{% endblock %}
+
+{% block content %}
+{% set interp = reading.interpretation or {} %}
+{% set major_lines = interp.major_lines or {} %}
+{% set domains = interp.life_domains or {} %}
+{% set features = reading.palm_features or {} %}
+{% set quality_score = features.quality_score or 75 %}
+
+<div class="container py-5">
+    <!-- Header Summary Badge -->
+    <div class="text-center mb-5">
+        <div class="d-inline-flex align-items-center gap-2 badge bg-gold bg-opacity-10 text-gold px-4 py-2 rounded-pill mb-3 small fw-semibold border border-gold-subtle">
+            <i class="fa-solid fa-square-check"></i> Computer Vision & Feature Extraction Complete
+        </div>
+        <h1 class="display-5 fw-bold">Your Structured Palm Analysis</h1>
+        <p class="text-secondary max-w-700 mx-auto">
+            Detected Hand: <strong class="text-light">{{ reading.hand_type or 'Hand' }}</strong> |
+            Archetype: <strong class="text-gold">{{ interp.hand_archetype or 'Universal' }}</strong> |
+            Analysis Quality Score: <strong class="text-success">{{ quality_score }}/100</strong>
+        </p>
+    </div>
+
+    <!-- Image Stages Row (Original, Processed ROI, Line Overlay) -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="glass-card p-3 rounded-4 text-center h-100">
+                <h6 class="fw-bold text-muted mb-3"><i class="fa-solid fa-camera me-1"></i> Original Palm Upload</h6>
+                <div class="img-preview-box rounded-3 overflow-hidden bg-black d-flex align-items-center justify-content-center min-h-250">
+                    {% if reading.image_path %}
+                        <img src="{{ url_for('serve_upload', filename=reading.image_path) }}" class="img-fluid rounded-3 max-vh-30" alt="Original Upload">
+                    {% else %}
+                        <div class="text-muted p-4">Image Unavailable</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card p-3 rounded-4 text-center h-100">
+                <h6 class="fw-bold text-muted mb-3"><i class="fa-solid fa-sliders me-1"></i> Enhanced Palm ROI</h6>
+                <div class="img-preview-box rounded-3 overflow-hidden bg-black d-flex align-items-center justify-content-center min-h-250">
+                    {% if reading.processed_image_path %}
+                        <img src="{{ url_for('serve_processed', filename=reading.processed_image_path) }}" class="img-fluid rounded-3 max-vh-30" alt="Processed ROI">
+                    {% else %}
+                        <div class="text-muted p-4">ROI Unavailable</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card p-3 rounded-4 text-center h-100 border-gold-subtle">
+                <h6 class="fw-bold text-gold mb-3"><i class="fa-solid fa-bezier-curve me-1"></i> CV Major Line Overlay</h6>
+                <div class="img-preview-box rounded-3 overflow-hidden bg-black d-flex align-items-center justify-content-center min-h-250 border border-gold border-opacity-25">
+                    {% if reading.overlay_image_path %}
+                        <img src="{{ url_for('serve_results', filename=reading.overlay_image_path) }}" class="img-fluid rounded-3 max-vh-30" alt="Line Overlay">
+                    {% else %}
+                        <div class="text-muted p-4">Overlay Unavailable</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overall Synthesis Summary Box -->
+    <div class="glass-card p-4 p-md-5 rounded-4 mb-5 border-start border-gold border-4">
+        <h4 class="fw-bold text-gold mb-3"><i class="fa-solid fa-file-contract me-2"></i> Executive Analysis Synthesis</h4>
+        <p class="lead text-light mb-0 fs-6">
+            {{ interp.summary_report or 'Analysis completed based on MediaPipe landmark tracking and OpenCV crease extraction.' }}
+        </p>
+    </div>
+
+    <!-- Major Lines Cards -->
+    <h3 class="fw-bold mb-4"><i class="fa-solid fa-hand-sparkles text-gold me-2"></i> Computer Vision Detected Crease Lines</h3>
+    <div class="row g-4 mb-5">
+        <!-- Heart Line -->
+        {% set heart = major_lines.heart_line or {} %}
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 rounded-4 h-100 border-start border-danger border-4">
+                <h5 class="fw-bold text-danger mb-2"><i class="fa-solid fa-heart me-2"></i> Heart Line</h5>
+                <div class="small text-secondary mb-1"><strong>Detected:</strong> {{ 'Yes' if heart.detected else 'No / Faint' }}</div>
+                <div class="small text-secondary mb-1"><strong>Length:</strong> {{ heart.length or 'N/A' }}</div>
+                <div class="small text-secondary mb-2"><strong>Curvature:</strong> {{ heart.curvature or 'N/A' }}</div>
+                <p class="small text-light mb-0 mt-3 border-top border-secondary border-opacity-25 pt-2">
+                    <em>Traditional Lore:</em> {{ heart.interpretation or 'Associated with emotional warmth and expression.' }}
+                </p>
+            </div>
+        </div>
+        <!-- Head Line -->
+        {% set head = major_lines.head_line or {} %}
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 rounded-4 h-100 border-start border-info border-4">
+                <h5 class="fw-bold text-info mb-2"><i class="fa-solid fa-brain me-2"></i> Head Line</h5>
+                <div class="small text-secondary mb-1"><strong>Detected:</strong> {{ 'Yes' if head.detected else 'No / Faint' }}</div>
+                <div class="small text-secondary mb-1"><strong>Length:</strong> {{ head.length or 'N/A' }}</div>
+                <div class="small text-secondary mb-2"><strong>Curvature:</strong> {{ head.curvature or 'N/A' }}</div>
+                <p class="small text-light mb-0 mt-3 border-top border-secondary border-opacity-25 pt-2">
+                    <em>Traditional Lore:</em> {{ head.interpretation or 'Associated with mental focus and analytical depth.' }}
+                </p>
+            </div>
+        </div>
+        <!-- Life Line -->
+        {% set life = major_lines.life_line or {} %}
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 rounded-4 h-100 border-start border-success border-4">
+                <h5 class="fw-bold text-success mb-2"><i class="fa-solid fa-leaf me-2"></i> Life Line</h5>
+                <div class="small text-secondary mb-1"><strong>Detected:</strong> {{ 'Yes' if life.detected else 'No / Faint' }}</div>
+                <div class="small text-secondary mb-1"><strong>Arc Path:</strong> {{ life.curvature or 'Sweeping' }}</div>
+                <div class="small text-secondary mb-2"><strong>Continuity:</strong> Clear</div>
+                <p class="small text-light mb-0 mt-3 border-top border-secondary border-opacity-25 pt-2">
+                    <em>Traditional Lore:</em> {{ life.interpretation or 'Associated with energy levels and active vitality.' }}
+                </p>
+            </div>
+        </div>
+        <!-- Fate Line -->
+        {% set fate = major_lines.fate_line or {} %}
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 rounded-4 h-100 border-start border-warning border-4">
+                <h5 class="fw-bold text-warning mb-2"><i class="fa-solid fa-star me-2"></i> Fate Line</h5>
+                <div class="small text-secondary mb-1"><strong>Detected:</strong> {{ 'Yes' if fate.detected else 'Self-Directed / Faint' }}</div>
+                <div class="small text-secondary mb-2"><strong>Structure:</strong> Central Axis</div>
+                <p class="small text-light mb-0 mt-3 border-top border-secondary border-opacity-25 pt-2">
+                    <em>Traditional Lore:</em> {{ fate.interpretation or 'Associated with career direction and goal alignment.' }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Traditional Life Domains -->
+    <h3 class="fw-bold mb-4"><i class="fa-solid fa-compass text-gold me-2"></i> Traditional Palmistry Interpretations</h3>
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 rounded-4 h-100">
+                <h5 class="fw-bold text-gold mb-3"><i class="fa-solid fa-briefcase me-2"></i> Career & Ambition</h5>
+                <p class="small text-secondary mb-0">
+                    {{ domains.career.traditional_insight if domains.career else 'Traditional lore connects your palm structure with leadership and goal alignment.' }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 rounded-4 h-100">
+                <h5 class="fw-bold text-gold mb-3"><i class="fa-solid fa-graduation-cap me-2"></i> Education & Learning</h5>
+                <p class="small text-secondary mb-0">
+                    {{ domains.education.traditional_insight if domains.education else 'Traditional lore connects head line clarity with continuous intellectual focus.' }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 rounded-4 h-100">
+                <h5 class="fw-bold text-gold mb-3"><i class="fa-solid fa-coins me-2"></i> Financial Outlook Lore</h5>
+                <p class="small text-secondary mb-0">
+                    {{ domains.finance.traditional_insight if domains.finance else 'Traditional palmistry associates balanced palm geometry with practical resource management. Not financial advice.' }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 rounded-4 h-100">
+                <h5 class="fw-bold text-gold mb-3"><i class="fa-solid fa-heart me-2"></i> Relationships</h5>
+                <p class="small text-secondary mb-0">
+                    {{ domains.relationships.traditional_insight if domains.relationships else 'Traditional lore connects heart line curvature with relational warmth and loyalty.' }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 rounded-4 h-100">
+                <h5 class="fw-bold text-gold mb-3"><i class="fa-solid fa-brain me-2"></i> Personality Archetype</h5>
+                <p class="small text-secondary mb-0">
+                    {{ domains.personality.traditional_insight if domains.personality else 'Palm proportion corresponds to traditional elemental archetypes.' }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 rounded-4 h-100">
+                <h5 class="fw-bold text-gold mb-3"><i class="fa-solid fa-leaf me-2"></i> General Vitality</h5>
+                <p class="small text-secondary mb-0">
+                    {{ domains.general_vitality.traditional_insight if domains.general_vitality else 'Traditional lore associates life line curvature with enthusiasm and physical energy. Not medical advice.' }}
+                </p>
+            </div>
+        </div>
+    <!-- AI Interactive Chat Section -->
+    <h3 class="fw-bold mb-4"><i class="fa-solid fa-comments text-gold me-2"></i> Ask Questions About Your Palm Analysis</h3>
+    <div class="glass-card p-4 p-md-5 rounded-4 mb-5 border-gold-subtle">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-8">
+                <h5 class="fw-bold text-light mb-1"><i class="fa-solid fa-robot text-gold me-2"></i> Palm Analysis Assistant</h5>
+                <p class="text-secondary small mb-0">Ask questions grounded strictly in your computer vision landmarks and traditional lore report.</p>
+            </div>
+            <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                <span class="badge bg-purple-glow text-purple-light border border-purple-light px-3 py-2 rounded-pill small">Grounded QA Mode</span>
+            </div>
+        </div>
+
+        <!-- Preset Quick Question Chips -->
+        <div class="d-flex flex-wrap gap-2 mb-4" id="presetChips">
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill chip-btn text-light border-opacity-25" data-q="What does my heart line mean?">
+                <i class="fa-solid fa-heart text-danger me-1"></i> What does my heart line mean?
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill chip-btn text-light border-opacity-25" data-q="What does my head line say about my focus?">
+                <i class="fa-solid fa-brain text-info me-1"></i> What does my head line mean?
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill chip-btn text-light border-opacity-25" data-q="Tell me about my career & ambition lore.">
+                <i class="fa-solid fa-briefcase text-gold me-1"></i> Tell me about my career lore
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill chip-btn text-light border-opacity-25" data-q="Is this financial advice?">
+                <i class="fa-solid fa-shield-halved text-warning me-1"></i> Is this financial advice?
+            </button>
+        </div>
+
+        <!-- Chat History Box -->
+        <div id="chatHistory" class="chat-history-box p-3 rounded-3 mb-3 bg-dark-subtle border border-secondary border-opacity-25 max-vh-40 overflow-y-auto" style="min-height: 180px;">
+            <div class="chat-message system-message mb-3 d-flex gap-3">
+                <div class="avatar bg-gold text-dark rounded-circle p-2 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="msg-body glass-card p-3 rounded-3 small">
+                    Hello! I can explain any detail of your computer-vision detected palm lines and traditional lore report. What would you like to know?
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form id="chatForm" class="d-flex gap-2">
+            <input type="text" id="chatInput" class="form-control rounded-pill bg-dark text-light border-secondary border-opacity-50 px-4" placeholder="Ask a question about your palm analysis..." required>
+            <button type="submit" id="chatSubmitBtn" class="btn btn-gradient rounded-pill px-4 flex-shrink-0">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const readingId = "{{ reading.id }}";
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const chatHistory = document.getElementById('chatHistory');
+    const chatSubmitBtn = document.getElementById('chatSubmitBtn');
+
+    // Preset chip clicks
+    document.querySelectorAll('.chip-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            chatInput.value = btn.dataset.q;
+            chatForm.dispatchEvent(new Event('submit'));
+        });
+    });
+
+    if (chatForm) {
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = chatInput.value.trim();
+            if (!question) return;
+
+            // Append User Message
+            appendMessage('user', question);
+            chatInput.value = '';
+            chatSubmitBtn.disabled = true;
+
+            // Show Typing Indicator
+            const typingId = appendMessage('system', '<em>Thinking...</em>');
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reading_id: readingId, question: question })
+                });
+                const data = await res.json();
+
+                // Replace typing indicator with actual answer
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
+
+                if (data.success) {
+                    appendMessage('system', data.answer);
+                } else {
+                    appendMessage('system', data.error || 'Unable to generate answer.');
+                }
+            } catch (err) {
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
+                appendMessage('system', 'Network error occurred while fetching answer.');
+            } finally {
+                chatSubmitBtn.disabled = false;
+            }
+        });
+    }
+
+    function appendMessage(sender, text) {
+        const msgId = 'msg-' + Date.now();
+        const wrapper = document.createElement('div');
+        wrapper.id = msgId;
+        wrapper.className = `chat-message ${sender}-message mb-3 d-flex gap-3 ${sender === 'user' ? 'justify-content-end' : ''}`;
+
+        if (sender === 'user') {
+            wrapper.innerHTML = `
+                <div class="msg-body bg-purple text-light p-3 rounded-3 small max-w-75">
+                    ${escapeHtml(text)}
+                </div>
+                <div class="avatar bg-purple text-light rounded-circle p-2 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            `;
+        } else {
+            wrapper.innerHTML = `
+                <div class="avatar bg-gold text-dark rounded-circle p-2 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="msg-body glass-card p-3 rounded-3 small max-w-75">
+                    ${text}
+                </div>
+            `;
+        }
+
+        chatHistory.appendChild(wrapper);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        return msgId;
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+});
+</script>
+{% endblock %}
+
+
